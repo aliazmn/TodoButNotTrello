@@ -1,0 +1,97 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;500&display=swap"
+            rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{% static 'assets/css/style_org.css' %}"/>
+    <link rel="stylesheet" href='{% static "assets/css/bootstrap.min.css" %}'>
+    <link rel="stylesheet" href='{% static "assets/css/nice-select.css" %}'>
+    <link rel="stylesheet" href='{% static "assets/css/font.css" %}'>
+    <link rel="stylesheet" href='{% static "assets/css/comman.css" %}'>
+    <link rel="stylesheet" href='{% static "assets/css/style.css" %}'>
+    <title>Boards</title>
+</head>
+<body>
+<div class="header-main-wrapper">
+    <div class="header-top-wrapper">
+        <div class="ht-left">
+        </div>
+        <div class="ht-right">
+            <div class="ht-right_info">
+                <ul class="ht-info-list">
+                    {% if not user.is_authenticated %}
+
+                        <li>
+                            <a href="{% url 'register' %}">ثبت نام </a> یا
+                            <a href="{% url 'login' %}">ورود </a>
+                        </li>
+                    {% else %}
+                        <li><a href="{% url 'profile' %}">حساب کاربری </a></li>
+                        <li>
+                            <a href="{% url 'logout' %}">خروج </a>
+                        </li>
+                    {% endif %}
+
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- Breadcumbs start -->
+<div class="e-wrap_custom text-center">
+    <h2 class="e-breadcumb-title">خانه</h2>
+</div>
+<section class="boards" dir="ltr">
+    {% if not user.is_authenticated %}
+
+    <h2 style="color: red">برای استفاده از خدمات سایت لطفا وارد شوید</h2>
+    {% else %}
+    <div class="boards_wrapper" style="">
+
+
+        <h2>Board</h2>
+        {% if err %}
+            <h style="color: red">{{ err }} </h>
+        {% endif %}
+        <div class="boards_container">
+
+            <!-- board template -->
+
+            {% if boards %}
+
+                {% for elm in boards %}
+                    <div class="board board_template">
+                        <img
+                                class="board-bg"
+                                src="{% static 'assets/images/board.jpg' %}"
+                        />
+
+                        <a class="board-title" href="{{ elm.get_absolute_url }}">{{ elm.name }}</a>
+
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <!-- -------------------------------------- -->
+            <div class="board create_board">
+                <form method="post" action="{% url 'home' %}">
+                    {% csrf_token %}
+                    <input class="e-field-inner" type="text" name="name">
+                    <button class="e-btn-mine">Create New Board</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+    {% endif %}
+</section>
+</body>
+</html>

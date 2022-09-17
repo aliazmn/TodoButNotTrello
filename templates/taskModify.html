@@ -1,0 +1,103 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;500&display=swap"
+            rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{% static 'assets/css/style_org.css' %}"/>
+
+    <title>Task</title>
+</head>
+<body>
+<div class="task_modify">
+    <div class="task_modify-wrapper">
+        <div class="container">
+            <div class="details_container" data-id="{{ cart.id }}" data-name="cart">
+                <input class="editable-test" style="text-align: left" type="text" value='{{ cart.name }}'  </input>
+                <div class="list-detail">in list <a href="{% url 'list' list.board_id %}">{{ list.title }}</a></div>
+                <div class="members_container">
+                    <span>Members</span>
+                    <div class="members_avatars-container">
+                        {% for elm in members %}
+                            <div class="member">
+                                <div class="member_avatar">{{ elm.username.0 }}</div>
+                                <a class="member_username"
+                                   href="{% url 'remove_member' cart.id elm.id %}">{{ elm.username }}</a>
+                                <br>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="description_container">
+                    <form class="description_container" action="{% url 'carts' cart.id %}" method="post">
+                        {% csrf_token %}
+                        <label>Description</label>
+                        <textarea
+                                name="desc"
+                        >{{ cart.desc }}</textarea>
+                        <label>EndTime</label>
+                        <input type="date" name="end_time" value={{ cart.end_time |date:'Y-m-d' }} />
+
+                        <button class="description_save-btn">Save</button>
+                    </form>
+                    <a class="description_save-btn" href="{% url 'delete' cart.id board.id %}">Delete Cart</a>
+                </div>
+                <div class="comments_container">
+                    <div class="comments_input">
+                        <div class="avatar">{{ login_user.username.0 }}</div>
+                        <form class="comments_input" action="{% url 'comments' cart.id %}" method="post">
+                            {% csrf_token %}
+                            <input type="text" placeholder="Write a comment..." name="comment_text"/>
+                            <button class="add_comment">Comment</button>
+                        </form>
+                    </div>
+                    <div class="comments">
+                        <!-- comment template -->
+                        {% for elm in comment %}
+                            <div class="comment-template">
+                                <div class="avatar">{{ elm.user.username.0 }}</div>
+                                <div class="username_comment">
+                                    <span>{{ elm.user.username }}</span>
+                                    <p>
+                                        {{ elm.text }}
+                                    </p>
+                                </div>
+                            </div>
+
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <aside class="aside_container">
+                <div class="members">
+                    <div class="members_title">Members</div>
+                    {% for elm in user %}
+                        <div class="member">
+                            <div class="member_avatar">{{ elm.username.0 }}</div>
+                            <a class="member_username"
+                               href="{% url 'add_member' cart.id elm.id %}">{{ elm.username }}</a>
+
+                        </div>
+
+                    {% endfor %}
+                </div>
+
+            </aside>
+        </div>
+    </div>
+
+</div>
+
+
+<script src="{% static '/assets/js/date.js' %}"></script>
+<script src="{% static '/assets/js/editable_text.js' %}"></script>
+
+</body>
+</html>

@@ -1,0 +1,4 @@
+django
+redis
+celery
+django-celery-beat
