@@ -2,3 +2,6 @@ django
 redis
 celery
 django-celery-beat
+html
+css
+
